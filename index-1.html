@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Dost! 🎉</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink:#ff5da2;
+    --yellow:#ffd23f;
+    --purple:#7b5bff;
+    --teal:#00c9a7;
+    --bg1:#2b1055;
+    --bg2:#4c2a85;
+    --card:#ffffff;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;overflow-x:hidden;}
+  body{
+    font-family:'Hind Siliguri','Baloo 2',sans-serif;
+    min-height:100vh;
+    background:linear-gradient(160deg,var(--bg1),var(--bg2) 60%,#1a0b3d);
+    color:#2b1055;
+    position:relative;
+  }
+
+  /* ---------- floating background blobs ---------- */
+  .blob{
+    position:fixed;
+    border-radius:50%;
+    filter:blur(10px);
+    opacity:.35;
+    z-index:0;
+    animation:float 12s ease-in-out infinite;
+  }
+  .blob.b1{width:280px;height:280px;background:var(--pink);top:-60px;left:-80px;animation-duration:14s;}
+  .blob.b2{width:200px;height:200px;background:var(--teal);bottom:10%;right:-60px;animation-duration:10s;}
+  .blob.b3{width:160px;height:160px;background:var(--yellow);top:40%;left:-60px;animation-duration:16s;}
+  @keyframes float{
+    0%,100%{transform:translateY(0) translateX(0) scale(1);}
+    50%{transform:translateY(-40px) translateX(30px) scale(1.08);}
+  }
+
+  /* ---------- confetti canvas ---------- */
+  #confetti{position:fixed;inset:0;pointer-events:none;z-index:5;}
+
+  header{
+    position:relative;
+    z-index:2;
+    text-align:center;
+    padding:60px 20px 20px;
+  }
+  .eyebrow{
+    display:inline-block;
+    font-family:'Baloo 2',sans-serif;
+    font-weight:700;
+    color:var(--yellow);
+    letter-spacing:2px;
+    background:rgba(255,255,255,0.08);
+    padding:6px 18px;
+    border-radius:999px;
+    font-size:0.9rem;
+    margin-bottom:18px;
+    border:1px dashed rgba(255,255,255,0.35);
+  }
+  h1{
+    font-family:'Baloo 2',sans-serif;
+    font-weight:800;
+    font-size:clamp(2.2rem,7vw,4.2rem);
+    margin:0;
+    color:#fff;
+    line-height:1.15;
+    text-shadow:0 6px 0 rgba(0,0,0,0.15);
+  }
+  h1 .wiggle{
+    display:inline-block;
+    animation:wiggle 2.4s ease-in-out infinite;
+  }
+  @keyframes wiggle{
+    0%,100%{transform:rotate(-4deg);}
+    50%{transform:rotate(6deg);}
+  }
+  .friend-name{
+    color:var(--yellow);
+  }
+  .subtitle{
+    max-width:640px;
+    margin:18px auto 0;
+    color:rgba(255,255,255,0.85);
+    font-size:clamp(1rem,2.6vw,1.25rem);
+    font-weight:600;
+  }
+
+  /* ---------- cake section ---------- */
+  .cake-wrap{
+    position:relative;
+    z-index:2;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    margin:40px auto 10px;
+  }
+  .cake{
+    position:relative;
+    width:220px;
+    cursor:pointer;
+    user-select:none;
+  }
+  .plate{width:240px;height:20px;background:#e9d8ff;border-radius:50%;margin-left:-10px;box-shadow:0 8px 18px rgba(0,0,0,0.25);}
+  .tier{width:220px;height:60px;border-radius:14px;margin:0 auto;position:relative;}
+  .tier.bottom{background:linear-gradient(180deg,#ffb3d1,var(--pink));width:220px;}
+  .tier.top{background:linear-gradient(180deg,#c9b6ff,var(--purple));width:160px;margin-top:-8px;}
+  .frosting{
+    position:absolute;top:-10px;left:0;right:0;height:20px;
+    background:repeating-radial-gradient(circle at 10px 10px, #fff 0 6px, transparent 7px 20px);
+  }
+  .candle{
+    position:absolute;top:-46px;width:8px;height:36px;background:linear-gradient(#fff8d6,#ffe28a);
+    border-radius:3px;box-shadow:0 0 0 1px rgba(0,0,0,0.05);
+  }
+  .candle:nth-child(1){left:40px;}
+  .candle:nth-child(2){left:78px;}
+  .candle:nth-child(3){left:116px;}
+  .flame{
+    position:absolute;top:-16px;left:-2px;width:12px;height:18px;
+    background:radial-gradient(circle,#fff3b0,var(--yellow) 60%,#ff7a00);
+    border-radius:50% 50% 50% 50%/60% 60% 40% 40%;
+    animation:flicker 0.5s ease-in-out infinite alternate;
+    transform-origin:bottom center;
+  }
+  @keyframes flicker{
+    0%{transform:scale(1) rotate(-3deg);}
+    100%{transform:scale(1.15,0.9) rotate(4deg);}
+  }
+  .flame.out{display:none;}
+  .cake-hint{
+    margin-top:14px;
+    font-weight:700;
+    color:var(--yellow);
+    font-size:0.95rem;
+    text-align:center;
+  }
+  .smoke{
+    position:absolute;top:-40px;width:6px;height:6px;background:rgba(255,255,255,0.6);
+    border-radius:50%;opacity:0;pointer-events:none;
+  }
+
+  /* ---------- balloons ---------- */
+  .balloons{
+    position:relative;
+    z-index:2;
+    height:0;
+  }
+  .balloon{
+    position:fixed;
+    bottom:-140px;
+    width:56px;
+    height:70px;
+    border-radius:50% 50% 50% 50%/60% 60% 40% 40%;
+    opacity:0.9;
+    animation:rise linear infinite;
+    z-index:1;
+  }
+  .balloon::after{
+    content:'';
+    position:absolute;
+    left:50%;
+    bottom:-40px;
+    width:1px;
+    height:40px;
+    background:rgba(255,255,255,0.4);
+  }
+  @keyframes rise{
+    0%{transform:translateY(0) translateX(0);}
+    50%{transform:translateY(-60vh) translateX(20px);}
+    100%{transform:translateY(-125vh) translateX(-10px);}
+  }
+
+  /* ---------- card / message section ---------- */
+  main{
+    position:relative;
+    z-index:2;
+    max-width:760px;
+    margin:50px auto;
+    padding:0 20px;
+  }
+  .msg-card{
+    background:var(--card);
+    border-radius:26px;
+    padding:34px 30px;
+    box-shadow:0 20px 50px rgba(0,0,0,0.35);
+    transform:rotate(-1deg);
+    position:relative;
+  }
+  .msg-card::before{
+    content:'🎂';
+    position:absolute;
+    top:-26px;
+    left:26px;
+    font-size:2.4rem;
+    transform:rotate(8deg);
+  }
+  .msg-card h2{
+    font-family:'Baloo 2',sans-serif;
+    margin-top:6px;
+    color:var(--purple);
+    font-size:1.5rem;
+  }
+  .msg-card p{
+    font-size:1.08rem;
+    line-height:1.9;
+    margin:14px 0;
+  }
+  .highlight{
+    background:linear-gradient(120deg,var(--yellow) 0%,var(--yellow) 100%);
+    background-repeat:no-repeat;
+    background-size:100% 40%;
+    background-position:0 88%;
+    font-weight:700;
+    padding:0 2px;
+  }
+  .signature{
+    text-align:right;
+    font-weight:700;
+    color:var(--pink);
+    margin-top:20px;
+    font-family:'Baloo 2',sans-serif;
+  }
+
+  /* ---------- joke generator ---------- */
+  .joke-box{
+    margin:36px auto 0;
+    text-align:center;
+  }
+  .joke-btn{
+    font-family:'Baloo 2',sans-serif;
+    font-weight:700;
+    font-size:1.05rem;
+    background:var(--teal);
+    color:#06342c;
+    border:none;
+    padding:16px 30px;
+    border-radius:999px;
+    cursor:pointer;
+    box-shadow:0 8px 0 #018f78, 0 14px 24px rgba(0,0,0,0.3);
+    transition:transform .08s ease;
+  }
+  .joke-btn:active{
+    transform:translateY(6px);
+    box-shadow:0 2px 0 #018f78, 0 6px 14px rgba(0,0,0,0.25);
+  }
+  .joke-output{
+    margin-top:22px;
+    min-height:70px;
+    background:rgba(255,255,255,0.08);
+    border:1px dashed rgba(255,255,255,0.4);
+    border-radius:18px;
+    padding:18px 20px;
+    color:#fff;
+    font-size:1.05rem;
+    font-weight:600;
+    line-height:1.7;
+    opacity:0;
+    transform:scale(0.9);
+    transition:all .25s ease;
+  }
+  .joke-output.show{opacity:1;transform:scale(1);}
+
+  /* ---------- roast meter ---------- */
+  .meter-box{
+    max-width:520px;
+    margin:50px auto 0;
+    text-align:center;
+    position:relative;
+    z-index:2;
+  }
+  .meter-box h3{
+    font-family:'Baloo 2',sans-serif;
+    color:#fff;
+    margin-bottom:10px;
+  }
+  .meter-track{
+    background:rgba(255,255,255,0.15);
+    border-radius:999px;
+    height:26px;
+    overflow:hidden;
+    border:2px solid rgba(255,255,255,0.3);
+  }
+  .meter-fill{
+    height:100%;
+    width:0%;
+    border-radius:999px;
+    background:linear-gradient(90deg,var(--teal),var(--yellow),var(--pink));
+    transition:width 1.4s cubic-bezier(.2,.9,.3,1.2);
+  }
+  .meter-label{
+    margin-top:10px;
+    color:var(--yellow);
+    font-weight:700;
+  }
+
+  /* ---------- video section ---------- */
+  .video-section{
+    position:relative;
+    z-index:2;
+    text-align:center;
+    margin:70px auto 40px;
+    max-width:420px;
+    padding:0 20px;
+  }
+  .video-section .eyebrow{margin-bottom:14px;}
+  .video-frame-wrap{
+    border-radius:24px;
+    overflow:hidden;
+    box-shadow:0 20px 50px rgba(0,0,0,0.45);
+    border:5px solid #fff;
+    background:#000;
+    aspect-ratio:9/16;
+  }
+  .video-frame-wrap iframe{
+    width:100%;
+    height:100%;
+    border:0;
+    display:block;
+  }
+  .video-caption{
+    margin-top:16px;
+    color:rgba(255,255,255,0.85);
+    font-weight:600;
+  }
+
+  footer{
+    position:relative;
+    z-index:2;
+    text-align:center;
+    padding:40px 20px 60px;
+    color:rgba(255,255,255,0.6);
+    font-size:0.9rem;
+  }
+
+  @media (max-width:480px){
+    .cake{width:180px;}
+    .tier.bottom{width:180px;}
+    .tier.top{width:130px;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<canvas id="confetti"></canvas>
+<div class="blob b1"></div>
+<div class="blob b2"></div>
+<div class="blob b3"></div>
+<div class="balloons" id="balloons"></div>
+
+<header>
+  <span class="eyebrow">🎈 SPECIAL ALERT 🎈</span>
+  <h1><span class="wiggle">🥳</span> Happy Birthday, <span class="friend-name" id="nameSlot">Dost</span>! <span class="wiggle">🥳</span></h1>
+  <p class="subtitle">আজকে তুই আরেক বছরের জন্য "বুড়ো" হয়ে গেলি — কিন্তু চিন্তা নাই, বুদ্ধি এখনো বাড়েনি 😜</p>
+</header>
+
+<div class="cake-wrap">
+  <div class="cake" id="cake" title="মোমবাতি নিভাতে ক্লিক কর!">
+    <div class="candle"><div class="flame" id="f1"></div></div>
+    <div class="candle" style="height:40px;"><div class="flame" id="f2"></div></div>
+    <div class="candle"><div class="flame" id="f3"></div></div>
+    <div class="tier top"><div class="frosting"></div></div>
+    <div class="tier bottom"><div class="frosting"></div></div>
+    <div class="plate"></div>
+  </div>
+  <div class="cake-hint" id="cakeHint">👆 কেকের মোমবাতিতে ক্লিক করে ফুঁ দে!</div>
+</div>
+
+<main>
+  <div class="msg-card">
+    <h2>শোন ব্যাটা / বান্ধবী... 🎤</h2>
+    <p>তোর জন্মদিনে তোকে কি গিফট দিব ভাবতে ভাবতে আমার নিজের জন্মদিন চলে আসার অবস্থা। তাই ভাবলাম <span class="highlight">একটা পুরা ওয়েবসাইটই বানিয়ে দিই</span> — কারণ তুই এমনিতেও আমার লাইফে ফ্রি এন্টারটেইনমেন্ট!</p>
+    <p>তুই এমন একজন মানুষ যে হাসতে হাসতে পেট ব্যথা করে দিতে পারিস, আবার মন খারাপের সময় ঠিক পাশে এসে দাঁড়াস। মানে সংক্ষেপে বলতে গেলে — তুই একটা <span class="highlight">লিমিটেড এডিশন</span> জিনিস, রিফান্ড বা এক্সচেঞ্জ চলবে না! 😂</p>
+    <p>আজকে যা খুশি তাই কর, বিরিয়ানি খা, কেক মুখে মাখামাখি কর, আর মনে রাখিস — বয়স বাড়লেও তোর ম্যাচিউরিটি এখনো ক্লাস ফাইভেই আটকে আছে, আর সেটাই তোকে স্পেশাল বানায় 🤪</p>
+    <div class="signature">— তোর সবচেয়ে ইররিটেটিং কিন্তু লয়্যাল বন্ধু 🫡</div>
+  </div>
+
+  <div class="joke-box">
+    <button class="joke-btn" id="jokeBtn">😂 একটা র‍্যান্ডম ফানি রোস্ট দে!</button>
+    <div class="joke-output" id="jokeOutput"></div>
+  </div>
+
+  <div class="meter-box">
+    <h3>🔥 আজকের "বুড়ামি মিটার" 🔥</h3>
+    <div class="meter-track"><div class="meter-fill" id="meterFill"></div></div>
+    <div class="meter-label" id="meterLabel">লোড হচ্ছে...</div>
+  </div>
+</main>
+
+<section class="video-section">
+  <span class="eyebrow">🎬 বোনাস কমেডি</span>
+  <div class="video-frame-wrap">
+    <iframe src="https://www.youtube.com/embed/p9YnUVQ3ctQ" title="Funny Birthday Video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  </div>
+  <p class="video-caption">এই ভিডিওটা দেখে হাসতে হাসতে পড়ে না গেলে বলিস 😂</p>
+</section>
+
+<footer>
+  Made with 😂 + 🎂 + a little too much free time — Happy Birthday!
+</footer>
+
+<script>
+  /* ---------------- Confetti ---------------- */
+  const canvas = document.getElementById('confetti');
+  const ctx = canvas.getContext('2d');
+  function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
+  resize();
+  window.addEventListener('resize', resize);
+
+  const colors = ['#ff5da2','#ffd23f','#7b5bff','#00c9a7','#ff8b5c'];
+  let confettiPieces = [];
+
+  function spawnConfetti(count){
+    for(let i=0;i<count;i++){
+      confettiPieces.push({
+        x: Math.random()*canvas.width,
+        y: -20 - Math.random()*200,
+        w: 6+Math.random()*6,
+        h: 8+Math.random()*10,
+        color: colors[Math.floor(Math.random()*colors.length)],
+        speed: 1.5+Math.random()*3,
+        drift: -1+Math.random()*2,
+        rot: Math.random()*360,
+        rotSpeed: -6+Math.random()*12
+      });
+    }
+  }
+  spawnConfetti(80);
+
+  function animateConfetti(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    confettiPieces.forEach(p=>{
+      p.y += p.speed;
+      p.x += p.drift;
+      p.rot += p.rotSpeed;
+      if(p.y > canvas.height+20){
+        p.y = -20;
+        p.x = Math.random()*canvas.width;
+      }
+      ctx.save();
+      ctx.translate(p.x,p.y);
+      ctx.rotate(p.rot*Math.PI/180);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+      ctx.restore();
+    });
+    requestAnimationFrame(animateConfetti);
+  }
+  animateConfetti();
+
+  /* burst confetti on demand */
+  function burst(x,y,amount=60){
+    for(let i=0;i<amount;i++){
+      confettiPieces.push({
+        x, y,
+        w:6+Math.random()*6,
+        h:8+Math.random()*10,
+        color: colors[Math.floor(Math.random()*colors.length)],
+        speed: -6+Math.random()*10,
+        drift: -6+Math.random()*12,
+        rot: Math.random()*360,
+        rotSpeed:-10+Math.random()*20
+      });
+    }
+  }
+
+  /* ---------------- Balloons ---------------- */
+  const balloonHolder = document.getElementById('balloons');
+  const balloonColors = ['#ff5da2','#ffd23f','#7b5bff','#00c9a7','#ff8b5c'];
+  function spawnBalloon(){
+    const b = document.createElement('div');
+    b.className='balloon';
+    b.style.left = Math.random()*100+'vw';
+    b.style.background = balloonColors[Math.floor(Math.random()*balloonColors.length)];
+    const dur = 9+Math.random()*8;
+    b.style.animationDuration = dur+'s';
+    balloonHolder.appendChild(b);
+    setTimeout(()=>b.remove(), dur*1000+200);
+  }
+  setInterval(spawnBalloon, 900);
+  for(let i=0;i<5;i++) setTimeout(spawnBalloon, i*300);
+
+  /* ---------------- Cake blow-out ---------------- */
+  const cake = document.getElementById('cake');
+  const flames = [document.getElementById('f1'),document.getElementById('f2'),document.getElementById('f3')];
+  const cakeHint = document.getElementById('cakeHint');
+  let blown = false;
+  cake.addEventListener('click', (e)=>{
+    if(blown){
+      // relight for fun
+      flames.forEach(f=>f.classList.remove('out'));
+      blown=false;
+      cakeHint.textContent = '👆 আবার ক্লিক কর!';
+      return;
+    }
+    flames.forEach(f=>f.classList.add('out'));
+    blown = true;
+    cakeHint.textContent = '🎉 উইশ করে ফেলেছিস! এবার সেটা সত্যি হোক 🎉';
+    const rect = cake.getBoundingClientRect();
+    burst(rect.left+rect.width/2, rect.top, 100);
+  });
+
+  /* ---------------- Joke generator ---------------- */
+  const jokes = [
+    "তুই এত স্লো যে তোর ইন্টারনেট স্পিডও তোকে দেখে লজ্জা পায় 🐌",
+    "তোর হাসির আওয়াজ শুনলে পাশের বাসার কুকুরও ঘেউ ঘেউ থামিয়ে দেয় 😂",
+    "জন্মদিনের কেক কাটার সময় মনে রাখিস — ছুরি দিয়ে কেক কাটবি, নিজের হাত না! গতবারের কথা ভুলিনি 🔪🤕",
+    "তুই এত ভুলো মনের যে নিজের জন্মদিনটাই আমাকে মনে করিয়ে দিতে হয় 🎂",
+    "হ্যাপি বার্থডে! আজকে থেকে অফিসিয়ালি তুই 'আঙ্কেল/আন্টি' ভাইবের দিকে এক কদম এগোলি 👴👵",
+    "তোর রান্নার হাত এতটাই বাজে যে স্মোক ডিটেক্টরও এখন তোকে ফ্যামিলি মেম্বার মনে করে 🔥🚨",
+    "কেক তো খাবিই, কিন্তু প্লিজ এবার প্লেটে খা, সোজা মুখে হামলা করিস না 😅",
+    "তোর গানের গলা শুনে মনে হয় মাইক নিজেই রিজাইন লেটার লিখে ফেলবে 🎤📄",
+    "Happy Birthday! আজকে যত ইচ্ছা খা, কালকে থেকে তো আবার 'ডায়েট শুরু করব' বলবি এমনিতেও 😂",
+    "তুই এতটাই ইউনিক যে ভগবানও তোকে বানানোর পর ভেবেছিল 'ইশ, একটু বেশিই মজা করে ফেললাম মনে হয়' 🤭"
+  ];
+  const jokeBtn = document.getElementById('jokeBtn');
+  const jokeOutput = document.getElementById('jokeOutput');
+  let lastIdx = -1;
+  jokeBtn.addEventListener('click', ()=>{
+    let idx;
+    do{ idx = Math.floor(Math.random()*jokes.length); } while(idx===lastIdx && jokes.length>1);
+    lastIdx = idx;
+    jokeOutput.textContent = jokes[idx];
+    jokeOutput.classList.remove('show');
+    void jokeOutput.offsetWidth; // reflow to restart animation
+    jokeOutput.classList.add('show');
+    const rect = jokeBtn.getBoundingClientRect();
+    burst(rect.left+rect.width/2, rect.top, 40);
+  });
+
+  /* ---------------- Buramir Meter ---------------- */
+  const meterFill = document.getElementById('meterFill');
+  const meterLabel = document.getElementById('meterLabel');
+  window.addEventListener('load', ()=>{
+    setTimeout(()=>{
+      const val = 60 + Math.floor(Math.random()*35); // 60-95%
+      meterFill.style.width = val+'%';
+      let label = '';
+      if(val<70) label = val+'% বুড়ামি — এখনো কিছুটা বাচ্চা আছিস 😌';
+      else if(val<85) label = val+'% বুড়ামি — সাবধান, আঙ্কেল/আন্টি জোন কাছাকাছি 👀';
+      else label = val+'% বুড়ামি — অফিসিয়ালি এখন থেকে হাঁটুর শব্দ শোনা যাবে 🦵😂';
+      meterLabel.textContent = label;
+    }, 500);
+  });
+</script>
+
+</body>
+</html>
